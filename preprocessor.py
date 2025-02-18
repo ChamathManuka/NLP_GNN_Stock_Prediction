@@ -17,7 +17,8 @@ nltk.download('stopwords')
 
 # Read the CSV file into a DataFrame
 # df = pd.read_csv("news_articles90k.csv")
-df = pd.read_csv("news_articles_test.csv")
+# df = pd.read_csv("Business_news_CSV_files/business_test_news_articles.csv")
+df = pd.read_csv("process_7.3_files/csv_files/old_news_articles_processed_concat.csv")
 # Create a new DataFrame to store the processed data
 processed_data = []
 stemmer = PorterStemmer()
@@ -27,10 +28,8 @@ stop_words = set(stopwords.words("english"))
 # Iterate through the rows of the DataFrame
 for index, row in df.iterrows():
     # Access data from each row
-    full_text = row["full_text"]
-    title = row["title"]
-    if (isinstance(full_text, str) and isinstance(title, str)):
-        paragraph = full_text + title
+    paragraph = row['filtered_tokens']
+    if (isinstance(paragraph, str)):
         print(paragraph)
         cleared_tokens = [re.sub(r"[^a-zA-Z]", "", token) for token in word_tokenize(paragraph)]
         tokens = [re.sub(r"\s+", " ", token) for token in cleared_tokens if token]
@@ -44,6 +43,6 @@ for index, row in df.iterrows():
 processed_df = pd.DataFrame(processed_data)
 
 # Save the processed DataFrame to a new CSV file
-processed_df.to_csv("processed_news_articles_test.csv", index=False)
+processed_df.to_csv("process_7.3_files/csv_files/tokenized_news_articles_processed_concat.csv", index=False)
 # processed_df.to_csv("processed_news_articles.csv", index=False)
 

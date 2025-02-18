@@ -1,42 +1,31 @@
+import csv
+import pickle
+
 import joblib
 import numpy as np
-from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
-from sklearn.preprocessing import MinMaxScaler
-import matplotlib.pyplot as plt
-import csv
 from PIL import Image
-import pickle
-from sklearn.preprocessing import MinMaxScaler
-import matplotlib.pyplot as plt
-
-import pickle
-import imagehash
-from PIL import Image
-from itertools import chain
-from tensorflow import keras
-from keras.applications import VGG16
-from keras.applications.vgg16 import preprocess_input
-from keras.preprocessing import image
 from keras import models, layers
-from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np
-from PIL import Image
+from keras.applications import VGG16
+from sklearn.preprocessing import MinMaxScaler
 
 # Load pre-trained VGG16 model without the top layers
-base_model = VGG16(weights='imagenet', include_top=False, input_shape=(123, 271, 3))
+# base_model = VGG16(weights='imagenet', include_top=False, input_shape=(80, 40, 3))
+base_model = VGG16(weights='imagenet', include_top=False, input_shape=(33, 1000, 3))
 model = models.Sequential([
     base_model,
     layers.Flatten()  # Flatten the output to get feature vectors
 ])
 
 
-loaded_vectorizer = joblib.load("tf-idf_model_files/tfidf_vectorizer100k.joblib")
-loaded_matrix = joblib.load("tf-idf_model_files/tfidf_matrix100k.joblib")
+loaded_vectorizer = joblib.load("tf-idf_model_files/tfidf_vectorizer99k.joblib")
+# loaded_matrix = joblib.load("tf-idf_model_files/tfidf_matrix99k.joblib")
+
+# loaded_vectorizer = joblib.load("tf-idf_model_files/tfidf_vectorizer5k_1.joblib")
+# loaded_matrix = joblib.load("tf-idf_model_files/tfidf_matrix5K_1.joblib")
 
 print("Loaded model and matrix successfully.")
 
-with open('testing.csv', 'r') as csvfile:
+with open('All_news_CSV_files/2024_09_26_test.csv', 'r') as csvfile:
     csvreader = csv.reader(csvfile)
     next(csvreader)
 
@@ -50,7 +39,8 @@ with open('testing.csv', 'r') as csvfile:
         leaned_words = [word.strip("'") for word in cleaned_string]
         document1 = ' '.join(leaned_words)
         vector1 = loaded_vectorizer.transform([document1]).toarray()[0]
-        tfidf_vector = vector1[1:]
+        tfidf_vector = vector1
+        # tfidf_vector = vector1[1:]
         # date_list.append(date)
 
         # Step 1: Calculate the sizes for each channel
@@ -80,9 +70,9 @@ with open('testing.csv', 'r') as csvfile:
         # if rgb_image.shape[0] != 10000:
         #     raise ValueError('Combined RGB channels do not sum to 10,000 pixels.')
 
-        rgb_image = rgb_image.reshape(123, 271, 3)
+        rgb_image = rgb_image.reshape(33, 1000, 3)
+        # rgb_image = rgb_image.reshape(40, 40, 3)
         image1 = Image.fromarray(rgb_image.astype(np.uint8))
-
         img1_array = np.array(image1)
         img1_array = np.expand_dims(img1_array, axis=0)
         features1 = model.predict(img1_array)
@@ -93,7 +83,7 @@ with open('testing.csv', 'r') as csvfile:
         print(count)
 
     # Save the list of (date, image) pairs
-    with open('date_2024-09-30.pkl', 'wb') as f:
+    with open('date_feature_test_list_files/9K_2024_09_26.pkl', 'wb') as f:
         pickle.dump(date_image_list_testing, f)
 
     print("Date-Image list saved successfully!")

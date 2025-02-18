@@ -1,4 +1,3 @@
-from typing import re
 
 import pandas as pd
 import nltk
@@ -15,7 +14,7 @@ nltk.download('stopwords')
 import csv
 
 # Read the CSV file into a DataFrame
-df = pd.read_csv("news_articles90k.csv")
+df = pd.read_csv("Business_news_CSV_files/business_news_articles_v1.csv")
 # Create a new DataFrame to store the processed data
 processed_data = []
 stemmer = PorterStemmer()
@@ -40,5 +39,5 @@ for index, row in df.iterrows():
 processed_df = pd.DataFrame(processed_data)
 
 # Save the processed DataFrame to a new CSV file
-processed_df.to_csv("processed_news_articles.csv", index=False)
+processed_df.to_csv("processed_business_news_articles.csv", index=False)
 

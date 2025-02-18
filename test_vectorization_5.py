@@ -4,7 +4,7 @@ import csv
 import joblib
 import numpy as np
 # Sample documents
-with open('processed_news_articles.csv', mode='r') as file:
+with open('processed_testing_news_articles.csv', mode='r') as file:
     csv_reader = csv.reader(file)
     next(csv_reader)
     documents = []
@@ -29,7 +29,7 @@ tfidf_vectorizer = TfidfVectorizer(
     sublinear_tf=True,            # Use logarithmic scale for term frequency
     norm='l2',                    # Apply L2 normalization to improve comparability
     ngram_range=(1, 2),           # Use unigrams and bigrams
-    max_features=500             # Limit to 5000 most important features
+    max_features=100000             # Limit to 5000 most important features
 )
 tfidf_matrix = tfidf_vectorizer.fit_transform(documents)
 
@@ -42,8 +42,8 @@ tfidf_matrix = tfidf_vectorizer.fit_transform(documents)
 # lsa_matrix = svd.fit_transform(tfidf_matrix)
 
 # Load the saved model and matrix
-loaded_vectorizer = joblib.load("tf-idf_model_files/tfidf_vectorizer100k.joblib")
-loaded_matrix = joblib.load("tf-idf_model_files/tfidf_matrix100k.joblib")
+loaded_vectorizer = joblib.load("tfidf_vectorizer100k.joblib")
+loaded_matrix = joblib.load("tfidf_matrix100k.joblib")
 
 print("Loaded model and matrix successfully.")
 

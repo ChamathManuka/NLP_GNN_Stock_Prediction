@@ -26,13 +26,16 @@ import numpy as np
 from PIL import Image
 
 
-loaded_vectorizer = joblib.load("tf-idf_model_files/tfidf_vectorizer100k.joblib")
-loaded_matrix = joblib.load("tf-idf_model_files/tfidf_matrix100k.joblib")
+# loaded_vectorizer = joblib.load("tf-idf_model_files/tfidf_vectorizer99k.joblib")
+loaded_vectorizer = joblib.load("tf-idf_model_files/tfidf_vectorizer5k_ALL.joblib")
+# loaded_matrix = joblib.load("tf-idf_model_files/tfidf_matrix99k.joblib")
+loaded_matrix = joblib.load("tf-idf_model_files/tfidf_matrix5k_ALL.joblib")
 
 print("Loaded model and matrix successfully.")
 
 # Load pre-trained VGG16 model without the top layers
-base_model = VGG16(weights='imagenet', include_top=False, input_shape=(123, 271, 3))
+base_model = VGG16(weights='imagenet', include_top=False, input_shape=(40, 40, 3))
+# base_model = VGG16(weights='imagenet', include_top=False, input_shape=(150, 220, 3))
 model = models.Sequential([
     base_model,
     layers.Flatten()  # Flatten the output to get feature vectors
@@ -52,14 +55,15 @@ def represent_data(csvreader, name):
         leaned_words = [word.strip("'") for word in cleaned_string]
         document1 = ' '.join(leaned_words)
         vector1 = loaded_vectorizer.transform([document1]).toarray()[0]
-        tfidf_vector = vector1[1:]
+        # tfidf_vector = vector1[1:]
+        tfidf_vector = vector1
         # date_list.append(date)
 
         # Step 1: Calculate the sizes for each channel
         n_features = len(tfidf_vector)
         red_size = n_features // 3
         green_size = n_features // 3
-        blue_size = n_features - red_size - green_size  # Ensure the total equals 10,000
+        blue_size = n_features - red_size - green_size  # Ensure the total equals 100,000
 
         # Step 2: Split the 10,000-dimensional TF-IDF vector into three parts for RGB channels
         red_channel = tfidf_vector[:red_size]
@@ -82,7 +86,8 @@ def represent_data(csvreader, name):
         # if rgb_image.shape[0] != 10000:
         #     raise ValueError('Combined RGB channels do not sum to 10,000 pixels.')
 
-        rgb_image = rgb_image.reshape(123, 271, 3)
+        rgb_image = rgb_image.reshape(40, 40, 3)
+        # rgb_image = rgb_image.reshape(150, 220, 3)
         image1 = Image.fromarray(rgb_image.astype(np.uint8))
         #new code change here
 
@@ -96,14 +101,15 @@ def represent_data(csvreader, name):
         print(count)
 
     # Save the list of (date, image) pairs
-    with open('date_feature_list'+name+'.pkl', 'wb') as f:
+    with open('date_feature_list_4'+name+'.pkl', 'wb') as f:
         pickle.dump(date_image_list, f)
 
     print("Date-Feature list saved successfully!")
 
 
 # Open the CSV file
-with open('processed_news_articles.csv', 'r') as csvfile:
+# with open('Business_news_CSV_files/processed_business_news_articles_2.csv', 'r') as csvfile:
+with open('All_news_CSV_files/news_articles90k_processed.csv', 'r') as csvfile:
     csvreader = csv.reader(csvfile)
     next(csvreader)  # Uncomment if there is a header
 
@@ -123,8 +129,8 @@ with open('processed_news_articles.csv', 'r') as csvfile:
             part1.append(row)
         else:
             part2.append(row)
-    represent_data(part1, '1.1')
-    represent_data(part2, '2.1')
+    represent_data(part1, '1.2')
+    represent_data(part2, '2.2')
 
 csvfile.close()
 

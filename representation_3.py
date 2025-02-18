@@ -12,7 +12,7 @@ import numpy as np
 from PIL import Image
 
 # Load pre-trained VGG16 model without the top layers
-base_model = VGG16(weights='imagenet', include_top=False, input_shape=(123, 271, 3))
+base_model = VGG16(weights='imagenet', include_top=False, input_shape=(45, 200, 3))
 model = models.Sequential([
     base_model,
     layers.Flatten()  # Flatten the output to get feature vectors
@@ -20,16 +20,17 @@ model = models.Sequential([
 
 
 # Load the pickled list
-with open('date_feature_list_files/date_feature_list1.1.pkl', 'rb') as f:
+with open('date_feature_list_files/business_date_feature_list_21.2.pkl', 'rb') as f:
     loaded_list1 = pickle.load(f)
 
-with open('date_feature_list_files/date_feature_list2.1.pkl', 'rb') as f:
+with open('date_feature_list_files/business_date_feature_list_22.2.pkl', 'rb') as f:
     loaded_list2 = pickle.load(f)
 
 concatenated_list = list(chain(loaded_list1, loaded_list2))
 
-with open('date_feature_test_list_files/date_2024-09-30.pkl', 'rb') as f:
+with open('date_feature_test_list_files/biz_test_list.pkl', 'rb') as f:
     loaded_list_test = pickle.load(f)
+    # loaded_list_test = loaded_list_test[:1500]
 # Now you can use the loaded list
 # print(loaded_list)
 
@@ -49,7 +50,7 @@ def find_most_similar(features1, image_list):
     # img1_array = np.array(image1)
     # img1_array = np.expand_dims(img1_array, axis=0)
     # features1 = model.predict(img1_array)
-    min_distance = .9
+    min_distance = .85
     sorted_list = []
     # hash1 = imagehash.average_hash(Image.fromarray(image1))
     # min_distance = float('inf')
@@ -65,7 +66,7 @@ def find_most_similar(features1, image_list):
 
     return sorted_list
 
-# Assuming your lists are named list1 and list2
+# Assuming your lists are named list1 and list
 
 
 
@@ -86,7 +87,7 @@ for item2 in loaded_list_test:
     similar_pairs.append((item2, total_out_list))
 
         # Save the list of (date, image) pairs
-with open('selected_list_files/.9selected_list_2024-09-30.pkl', 'wb') as f:
+with open('selected_list_files/biz_test_list.pkl', 'wb') as f:
     pickle.dump(similar_pairs, f)
     print(" list has been saved ##########################################################################################################################################################################")
 
