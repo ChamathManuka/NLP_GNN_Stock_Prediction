@@ -139,7 +139,7 @@ def parameter_tuning(stock_name):
 # -----------------------------------------------------------------------------------------------------------------------
 
 def model_building(stock_name):
-    df = pd.read_pickle("evaluation_mpl_files/list_files/train.pkl")
+    df = pd.read_pickle("evaluation_files/list_files/train.pkl")
 
     df['sbert_vectors'] = df['sbert_vectors'].apply(np.array)
     df['fingpt_vectors'] = df['fingpt_vectors'].apply(np.array)
@@ -153,7 +153,7 @@ def model_building(stock_name):
     df = df.drop(columns=['vector']).join(vector_df)
     # Assuming df is the DataFrame with features and 'Daily Return' as the target
 
-    X = df.drop(columns=['added_date', 'sbert_vectors', 'fingpt_vectors', 'neu_sent', 'pos_sent', 'neg_sent','change %', 'return', 'price'])
+    X = df.drop(columns=['added_date', 'sbert_vectors', 'fingpt_vectors', 'neu_sent', 'pos_sent', 'neg_sent','Change %', 'return', 'price'])
 
     # X = vector_df  # Features
     X = X.to_numpy(dtype=np.float32)
@@ -371,6 +371,6 @@ def model_testing(stock_name):
 
 # -----------------------------------------------------------------------------------------------------------------------
 
-# model_building("HNB")
+model_building("JKH")
 # parameter_tuning("HNB")
-model_testing("HNB")
+# model_testing("HNB")

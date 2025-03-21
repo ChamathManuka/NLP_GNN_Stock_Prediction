@@ -62,7 +62,7 @@ class LSTMModel(tf.keras.Model):
 # -----------------------------------------------------------------------------------------------------------------------
 
 def model_building(stock_name):
-    df = pd.read_pickle("evaluation_lstm_files/list_files/train.pkl")
+    df = pd.read_pickle("evaluation_files/list_files/train.pkl")
     results_df = pd.DataFrame({
         'date': df['added_date']
     })
@@ -78,7 +78,7 @@ def model_building(stock_name):
     df = df.drop(columns=['vector']).join(vector_df)
     # Assuming df is the DataFrame with features and 'Daily Return' as the target
 
-    X = df.drop(columns=['added_date', 'sbert_vectors', 'fingpt_vectors', 'neu_sent', 'pos_sent', 'neg_sent','change %', 'return', 'price'])
+    X = df.drop(columns=['added_date', 'sbert_vectors', 'fingpt_vectors', 'neu_sent', 'pos_sent', 'neg_sent','Change %', 'return', 'price'])
 
     # X = vector_df  # Features
     X = X.to_numpy(dtype=np.float32)
@@ -268,7 +268,7 @@ def parameter_tuning_lstm(stock_name):
 
 # -----------------------------------------------------------------------------------------------------------------------
 def model_testing(stock_name):
-    df = pd.read_pickle("evaluation_lstm_files/list_files/test.pkl")
+    df = pd.read_pickle("evaluation_files/list_files/test.pkl")
     results_df = pd.DataFrame({
         'date': df['added_date']
     })
@@ -285,7 +285,7 @@ def model_testing(stock_name):
     # Assuming df is the DataFrame with features and 'Daily Return' as the target
 
     X = df.drop(
-        columns=['added_date', 'sbert_vectors', 'fingpt_vectors', 'neu_sent', 'pos_sent', 'neg_sent', 'change %',
+        columns=['added_date', 'sbert_vectors', 'fingpt_vectors', 'neu_sent', 'pos_sent', 'neg_sent', 'Change %',
                  'return', 'price'])
 
     # X = vector_df  # Features
@@ -319,6 +319,6 @@ def model_testing(stock_name):
     results_df.to_pickle("evaluation_lstm_files/model_files/" + stock_name + "_predictions.pkl")
 # -----------------------------------------------------------------------------------------------------------------------
 
-# model_building("HNB")
+model_building("JKH")
 # parameter_tuning_lstm("HNB")
-model_testing("HNB")
+# model_testing("JKH")

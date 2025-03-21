@@ -5,12 +5,12 @@ import nltk
 import numpy as np
 import pandas as pd
 import torch
-from gensim.models.doc2vec import Doc2Vec, TaggedDocument
-from keras import Input
-from keras.src.callbacks import ReduceLROnPlateau, EarlyStopping
-from keras.src.layers import Conv1D, Flatten, LeakyReLU, BatchNormalization, Dropout
-from keras.src.optimizers import RMSprop, Adam, SGD
-from keras.src.regularizers import l2
+# from gensim.models.doc2vec import Doc2Vec, TaggedDocument
+# from keras import Input
+# from keras.src.callbacks import ReduceLROnPlateau, EarlyStopping
+# from keras.src.layers import Conv1D, Flatten, LeakyReLU, BatchNormalization, Dropout
+# from keras.src.optimizers import RMSprop, Adam, SGD
+# from keras.src.regularizers import l2
 from matplotlib import pyplot as plt
 from nltk import WordNetLemmatizer, PorterStemmer
 from nltk.corpus import stopwords
@@ -30,7 +30,7 @@ import keras_tuner as kt
 from tensorflow.keras.losses import Huber
 
 
-from tensorflow.keras.optimizers import AdamW
+# from tensorflow.keras.optimizers import AdamW
 from sentence_transformers import SentenceTransformer
 import pandas as pd
 import numpy as np
@@ -220,6 +220,7 @@ def data_preprocessing():
 
 def stock_price_data_processing(stock_name):
 
+    # df_daily = pd.read_pickle("workflow_files/list_files/document_vectors.pkl")
     df_daily = pd.read_pickle("workflow_files/list_files/document_vectors_test.pkl")
     df_stock = pd.read_csv("stock_price_files/" + stock_name + "_NEW.csv", parse_dates=['Date'])
 
@@ -250,6 +251,7 @@ def stock_price_data_processing(stock_name):
     # Ensure no missing values
     df_daily.dropna(inplace=True)
 
+    # df_daily.to_pickle("workflow_files/list_files/price_attached_vectors.pkl")
     df_daily.to_pickle("workflow_files/list_files/price_attached_vectors_test.pkl")
 
 
@@ -379,5 +381,5 @@ def gnn_creation():
 
 # -----------------------------------------------------------------------------------------------------------------------
 # data_preprocessing()
-# stock_price_data_processing("HNB")
-gnn_creation()
+stock_price_data_processing("BIL")
+# gnn_creation()

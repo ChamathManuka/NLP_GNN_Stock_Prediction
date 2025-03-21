@@ -18,7 +18,7 @@ from tensorflow.keras import regularizers
 from sklearn.metrics.pairwise import cosine_similarity
 
 # 1️⃣ Load Data
-df = pd.read_pickle("evaluation_files/list_files/train.pkl")
+df = pd.read_pickle("evaluation_files/list_files/train_with_reduced_vectors.pkl")
 # df = pd.read_pickle("vectorization_process_files/list_files/train_title.pkl")
 
 # 2️⃣ Normalize return values
@@ -26,30 +26,30 @@ return_scaler = MinMaxScaler()
 df['return_scaled'] = return_scaler.fit_transform(df[['return']])
 
 # Save return scaler
-joblib.dump(return_scaler, "evaluation_files/model_files/return_scaler.pkl")
+joblib.dump(return_scaler, "evaluation_files/model_files/return_scaler_reduced.pkl")
 
 # 3️⃣ Initialize Graph
 graph = nx.Graph()
 
 # 4️⃣ Add nodes (news & stock prices)
 for index, row in df.iterrows():
-    news_vector = np.concatenate([row['sbert_vectors'], row['fingpt_vectors']])  # Removed sentiment values
+    news_vector = np.concatenate([row['reduced_sbert'], row['reduced_fingpt']])  # Removed sentiment values
     graph.add_node(f"news_{index}", type="news", features=news_vector)
     graph.add_node(f"stock_{row['added_date']}", type="stock", price=row['price'], change=row['return_scaled'])
 
 # 5️⃣ Compute cosine similarity (SBERT & FinGPT)
-sbert_sim = cosine_similarity(np.stack(df['sbert_vectors'].tolist()))
-fingpt_sim = cosine_similarity(np.stack(df['fingpt_vectors'].tolist()))
+co_sim = cosine_similarity(np.stack(df['reduced_sbert'].tolist()))
+co_fin = cosine_similarity(np.stack(df['reduced_fingpt'].tolist()))
 
 # 6️⃣ Add news-news edges based on similarity
 for i in range(len(df)):
     for j in range(i + 1, len(df)):
-        sim_weight = sbert_sim[i, j]  # Average similarity
-        fin_weight = fingpt_sim[i, j] # Average similarity
+        sim_weight = co_sim[i, j]  # Average similarity
+        co_weight = co_fin[i, j]  # Average similarity
         if sim_weight > 0.8:  # threshold, tune for better performance
             graph.add_edge(f"news_{i}", f"news_{j}", weight=sim_weight)
-        if fin_weight > 0.8:  # threshold, tune for better performance
-            graph.add_edge(f"news_{i}", f"news_{j}", weight=fin_weight)
+        if co_weight > 0.8:  # threshold, tune for better performance
+            graph.add_edge(f"news_{i}", f"news_{j}", weight=co_weight)
 
 # 7️⃣ Add news-stock edges
 for index, row in df.iterrows():
@@ -119,7 +119,7 @@ history = model.fit(
 )
 
 # 1️⃣5️⃣ Save Model
-model.save("evaluation_files/model_files/graphsage_stock_model_3.h5")
+model.save("evaluation_files/model_files/graphsage_stock_model_3_reduced.h5")
 
 # 1️⃣6️⃣ Load Model
 custom_objects = {
@@ -128,7 +128,7 @@ custom_objects = {
     "BatchNormalization": BatchNormalization,
 }
 loaded_model = load_model(
-    "evaluation_files/model_files/graphsage_stock_model_3.h5", custom_objects=custom_objects
+    "evaluation_files/model_files/graphsage_stock_model_3_reduced.h5", custom_objects=custom_objects
 )
 
 # 1️⃣7️⃣ Predict

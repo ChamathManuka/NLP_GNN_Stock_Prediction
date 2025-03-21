@@ -21,7 +21,8 @@ from tensorflow.keras.models import load_model
 
 
 # df = pd.read_pickle("vectorization_process_files/list_files/train_title.pkl")
-df = pd.read_pickle("workflow_files/list_files/train.pkl")
+# df = pd.read_pickle("workflow_files/list_files/train.pkl")
+df = pd.read_pickle("evaluation_files/list_files/train.pkl")
 
 
 
@@ -30,7 +31,8 @@ return_scaler = MinMaxScaler()
 df['return_scaled'] = return_scaler.fit_transform(df[['return']])
 
 # Save return scaler
-joblib.dump(return_scaler, "workflow_files/model_files/return_scaler.pkl")
+joblib.dump(return_scaler, "evaluation_files/model_files/return_scaler.pkl")
+# joblib.dump(return_scaler, "workflow_files/model_files/return_scaler.pkl")
 
 # Calculate 5-day moving average of returns
 df['5_day_moving_avg'] = df['return'].rolling(window=5).mean()
@@ -91,7 +93,8 @@ scaler = MinMaxScaler()
 train_targets = scaler.fit_transform(train_targets.reshape(-1, 1)).flatten()
 val_targets = scaler.transform(val_targets.reshape(-1, 1)).flatten()
 test_targets = scaler.transform(test_targets.reshape(-1, 1)).flatten()
-joblib.dump(scaler, "workflow_files/model_files/min_max_scaler.pkl")
+# joblib.dump(scaler, "workflow_files/model_files/min_max_scaler.pkl")
+joblib.dump(scaler, "evaluation_files/model_files/min_max_scaler.pkl")
 
 # Create GraphSAGE Data Generator
 generator = GraphSAGENodeGenerator(stellar_graph, batch_size=50, num_samples=[10, 10, 5])
@@ -121,11 +124,13 @@ history = model.fit(train_gen,
                     verbose=1)
 
 # Save Model
-model.save("workflow_files/model_files/graphsage_stock_model.h5")
+# model.save("workflow_files/model_files/graphsage_stock_model.h5")
+model.save("evaluation_files/model_files/graphsage_stock_model.h5")
 
 # Load Model
 custom_objects = {"GraphSAGE": GraphSAGE, "MeanAggregator": MeanAggregator, "BatchNormalization": BatchNormalization}
-loaded_model = load_model("workflow_files/model_files/graphsage_stock_model.h5", custom_objects=custom_objects)
+# loaded_model = load_model("workflow_files/model_files/graphsage_stock_model.h5", custom_objects=custom_objects)
+loaded_model = load_model("evaluation_files/model_files/graphsage_stock_model.h5", custom_objects=custom_objects)
 
 # Predict
 y_pred = loaded_model.predict(test_gen)

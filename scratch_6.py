@@ -59,8 +59,8 @@ print(f"KS p-value = {ks_p_value:.4f}")
 df_train.reset_index(drop=True, inplace=True)
 df_test.reset_index(drop=True, inplace=True)
 
-df_train.to_pickle("gnn_model_3_files/list_files/train.pkl")
-df_test.to_pickle("gnn_model_3_files/list_files/test.pkl")
+df_train.to_pickle("evaluation_files/list_files/train.pkl")
+df_test.to_pickle("evaluation_files/list_files/test.pkl")
 
 
 
