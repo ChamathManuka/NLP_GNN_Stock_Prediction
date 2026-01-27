@@ -20,7 +20,7 @@ qt = QuantileTransformer(output_distribution='uniform')
 # model = AutoModel.from_pretrained(model_name)
 
 sbert_model = SentenceTransformer('all-MiniLM-L6-v2')
-token = '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'
+token = 'your_token'
 
 fingpt_tokenizer = AutoTokenizer.from_pretrained("cm309/distilroberta-base-finetuned-Financial-News-Superior",
                                                  use_auth_token=token)

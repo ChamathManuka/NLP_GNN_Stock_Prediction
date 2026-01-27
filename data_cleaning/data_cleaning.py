@@ -15,7 +15,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from transformers import AutoTokenizer, AutoModel, AutoModelForSequenceClassification
 
 sbert_model = SentenceTransformer('all-MiniLM-L6-v2')
-token = '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'
+token = 'your_token'
 
 fingpt_tokenizer = AutoTokenizer.from_pretrained("cm309/distilroberta-base-finetuned-Financial-News-Superior",
                                                  use_auth_token=token)
