@@ -2,7 +2,7 @@ import openai
 import numpy as np
 
 # Set your API key
-openai.api_key = "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"
+openai.api_key = "your_openai_api_key"
 
 # Request embeddings using the OpenAI client
 response = openai.Embedding.create(
