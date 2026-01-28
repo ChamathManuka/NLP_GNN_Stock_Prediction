@@ -121,3 +121,9 @@ Please note:
 **Chamath Gamage**  
 Backend Engineer | Python | Java | ML & NLP
 
+## License
+
+This project is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.  
+You are free to use and adapt this project for research and educational purposes **with proper credit**. Commercial use is not allowed.
+
+For full license text, see [LICENSE](LICENSE).
